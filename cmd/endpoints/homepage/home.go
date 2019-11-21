@@ -49,8 +49,8 @@ func requestHandler() {
 	// Map requests for the root to the homepageData function
 	Router.HandleFunc("/", homepageContent)
 
-	// Map requests for the get all the veggies function
-	Router.HandleFunc("/vegetables", getAllVegetables)
+	// Map requests for the get all the veggies function - only accessible via GET request
+	Router.HandleFunc("/vegetables", getAllVegetables).Methods("GET")
 
 	// Log any errors
 	log.Fatal(http.ListenAndServe(":8080", Router))
