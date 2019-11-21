@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 //Veggie is a struct holding details for one vegetable
@@ -35,20 +37,23 @@ func getAllVegetables(res http.ResponseWriter, req *http.Request) {
 //homepageData prints a message to given I/O
 func homepageContent(res http.ResponseWriter, req *http.Request) {
 
-	fmt.Fprintf(res, "Hello - you have hit the homepage endpoint. Got veg?")
+	fmt.Fprintf(res, "Hello. Got veg?")
 }
 
 //requestHandler maps endpoints to functions
 func requestHandler() {
 
+	// Define gorilla mux router for requests
+	Router := mux.NewRouter().StrictSlash(true)
+
 	// Map requests for the root to the homepageData function
-	http.HandleFunc("/", homepageContent)
+	Router.HandleFunc("/", homepageContent)
 
 	// Map requests for the get all the veggies function
-	http.HandleFunc("/vegetables", getAllVegetables)
+	Router.HandleFunc("/vegetables", getAllVegetables)
 
 	// Log any errors
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", Router))
 }
 
 func main() {
