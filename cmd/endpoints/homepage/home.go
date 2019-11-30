@@ -50,7 +50,12 @@ func homepageContent(res http.ResponseWriter, req *http.Request) {
 	welcome := Welcome{Name: "Anonymous", Time: time.Now().Format(time.Stamp), Mssg: "Got veg?"}
 
 	// Set HTML template to be used
-	templates := template.Must(template.ParseFiles("/Users/devonedwardsjoseph/Documents/dev/repos/go-basic-rest-api/cmd/frontend/static/home.html"))
+	templates := template.Must(template.ParseFiles("/Users/devonedwardsjoseph/Documents/dev/repos/go-basic-rest-api/static/home.html"))
+
+	// Tell go to also serve CSS files in static/ dir
+	http.Handle("/static/",
+		http.StripPrefix("/static/",
+			http.FileServer(http.Dir("static"))))
 
 	// is user's name available in url - if no, use default
 	if name := req.FormValue("name"); name != "" {
@@ -76,7 +81,7 @@ func requestHandler() {
 	// Map requests for the get all the veggies function - only accessible via GET request
 	Router.HandleFunc("/vegetables", getAllVegetables).Methods("GET")
 
-	// Log any errors
+	fmt.Println("Server running on port 8080.")
 	log.Fatal(http.ListenAndServe(":8080", Router))
 }
 
