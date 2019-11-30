@@ -50,12 +50,7 @@ func homepageContent(res http.ResponseWriter, req *http.Request) {
 	welcome := Welcome{Name: "Anonymous", Time: time.Now().Format(time.Stamp), Mssg: "Got veg?"}
 
 	// Set HTML template to be used
-	templates := template.Must(template.ParseFiles("/Users/devonedwardsjoseph/Documents/dev/repos/go-basic-rest-api/static/home.html"))
-
-	// Tell go to also serve CSS files in static/ dir
-	http.Handle("/static/",
-		http.StripPrefix("/static/",
-			http.FileServer(http.Dir("static"))))
+	templates := template.Must(template.ParseFiles("/Users/devonedwardsjoseph/Documents/dev/repos/go-basic-rest-api/static/templates/home.html"))
 
 	// is user's name available in url - if no, use default
 	if name := req.FormValue("name"); name != "" {
@@ -74,6 +69,8 @@ func requestHandler() {
 
 	// Define gorilla mux router for requests
 	Router := mux.NewRouter().StrictSlash(true)
+
+	Router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	// Map requests for the root to the homepageData function
 	Router.HandleFunc("/", homepageContent)
