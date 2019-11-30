@@ -70,6 +70,7 @@ func requestHandler() {
 	// Define gorilla mux router for requests
 	Router := mux.NewRouter().StrictSlash(true)
 
+	//TODO - GET CSS SERVE WORKING
 	Router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	// Map requests for the root to the homepageData function
