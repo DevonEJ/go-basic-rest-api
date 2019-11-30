@@ -50,7 +50,7 @@ func homepageContent(res http.ResponseWriter, req *http.Request) {
 	welcome := Welcome{Name: "Anonymous", Time: time.Now().Format(time.Stamp), Mssg: "Got veg?"}
 
 	// Set HTML template to be used
-	templates := template.Must(template.ParseFiles("../../frontend/home.html"))
+	templates := template.Must(template.ParseFiles("/Users/devonedwardsjoseph/Documents/dev/repos/go-basic-rest-api/cmd/frontend/static/home.html"))
 
 	// is user's name available in url - if no, use default
 	if name := req.FormValue("name"); name != "" {
