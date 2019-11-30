@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
+	"html/template"
 
 	"github.com/gorilla/mux"
 )
@@ -34,10 +36,32 @@ func getAllVegetables(res http.ResponseWriter, req *http.Request) {
 
 }
 
-//homepageData prints a message to given I/O
+// Mock up welcome data
+type Welcome struct {
+	Name string
+	Time string
+	Mssg string
+}
+
+//homepageData prints a message to given I/O using user's name if available in url
 func homepageContent(res http.ResponseWriter, req *http.Request) {
 
-	fmt.Fprintf(res, "Hello. Got veg?")
+	// Mock up the default welcome message
+	welcome := Welcome{Name: "Anonymous", Time: time.Now().Format(time.Stamp), Mssg: "Got veg?"}
+
+	// Set HTML template to be used
+	templates := template.Must(template.ParseFiles("../../frontend/home.html"))
+
+	// is user's name available in url - if no, use default
+	if name := req.FormValue("name"); name != "" {
+		welcome.Name = name
+	}
+
+	if err := templates.ExecuteTemplate(res, "home.html", welcome); err != nil {
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+	}
+
+
 }
 
 //requestHandler maps endpoints to functions
